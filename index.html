@@ -35,6 +35,7 @@
     <main class="max-w-3xl mx-auto px-4 space-y-4">
         <!-- 入力セクション -->
         <section class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- ラベル（デスクトップ用） -->
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 hidden md:grid grid-cols-12 gap-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                 <div class="col-span-5">定価 (Price)</div>
                 <div class="col-span-3 text-center">数量 (Qty)</div>
@@ -49,12 +50,12 @@
         <!-- リセットボタン -->
         <div class="text-center py-4">
             <button onclick="confirmReset()" class="px-8 py-3 bg-white text-red-600 border border-red-200 font-bold rounded-full hover:bg-red-50 transition-colors shadow-sm active:scale-95">
-                入力内容をクリア
+                入力をすべてリセット
             </button>
         </div>
     </main>
 
-    <!-- フローティング合計バー（ここをご要望に合わせて変更しました） -->
+    <!-- フローティング合計バー -->
     <div class="sticky-total bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-10px_25px_rgba(0,0,0,0.1)] p-4 md:p-6 mt-12">
         <div class="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center space-x-6">
@@ -78,7 +79,7 @@
             
             <!-- 総合計 -->
             <div class="text-right">
-                <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">総合計金額</span>
+                <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">最終総合計金額</span>
                 <div class="text-4xl font-black text-indigo-950 leading-none">
                     <span id="grandTotalDisplay">0</span><span class="text-xl ml-1 font-medium text-indigo-400">円</span>
                 </div>
@@ -100,7 +101,8 @@
                         <input type="number" id="price-${i}" class="w-full p-2 bg-gray-50 border border-transparent rounded-lg focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm font-medium" placeholder="定価" oninput="calculate()">
                     </div>
                     <div class="col-span-6 md:col-span-3">
-                        <input type="number" id="qty-${i}" value="0" class="w-full p-2 bg-gray-50 border border-transparent rounded-lg focus:bg-white focus:border-indigo-500 outline-none transition-all text-center text-sm font-bold text-indigo-600" oninput="calculate()">
+                        <!-- 数量を0なし、プレースホルダーのみに設定 -->
+                        <input type="number" id="qty-${i}" class="w-full p-2 bg-gray-50 border border-transparent rounded-lg focus:bg-white focus:border-indigo-500 outline-none transition-all text-center text-sm font-bold text-indigo-600" placeholder="数量" oninput="calculate()">
                     </div>
                     <div class="col-span-6 md:col-span-4 text-right pr-2">
                         <span id="subtotal-${i}" class="font-mono font-bold text-slate-600 text-sm">0</span>
@@ -132,10 +134,10 @@
         }
 
         function confirmReset() {
-            if (confirm('入力をすべてクリアしますか？')) {
+            if (confirm('すべての入力内容（定価・数量・税設定）をリセットしますか？')) {
                 for (let i = 1; i <= ROW_COUNT; i++) {
                     document.getElementById(`price-${i}`).value = '';
-                    document.getElementById(`qty-${i}`).value = '0';
+                    document.getElementById(`qty-${i}`).value = ''; // 空にする
                 }
                 document.getElementById('taxGlobal').checked = false;
                 calculate();
